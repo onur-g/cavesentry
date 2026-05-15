@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CaveSentry</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <header>
+        <h1>CaveSentry</h1>
+        
+        <!-- Weather Section -->
+        <div class="weather-section">
+            <% if (typeof weather !== 'undefined' && weather) { %>
+                <h2>Current Weather in <%= location %></h2>
+                <p>Temperature: <%= weather.main.temp %>°C</p>
+                <p>Conditions: <%= weather.weather[0].description %></p>
+            <% } else { %>
+                <p>Weather data not loaded on this page. <a href="/weather">View Weather</a></p>
+            <% } %>
+        </div>
+    </header>
+
+    <main>
+        <!-- Form Section -->
+        <section class="form-section">
+            <h2>Submit a New Safety Report</h2>
+            <form action="/" method="POST">
+                <div class="form-group">
+                    <label for="diverName">Diver Name:</label>
+                    <input type="text" id="diverName" name="diverName" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="location">Location:</label>
+                    <input type="text" id="location" name="location" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="advice">Safety Advice:</label>
+                    <textarea id="advice" name="advice" rows="4" required></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="dangerLevel">Danger Level (1-5):</label>
+                    <input type="number" id="dangerLevel" name="dangerLevel" min="1" max="5" required>
+                </div>
+                
+                <button type="submit">Submit Report</button>
+            </form>
+        </section>
+
+        <hr>
+
+        <!-- Reports List Section -->
+        <section class="reports-section">
+            <h2>Existing Safety Reports</h2>
+            <% if (typeof reports !== 'undefined' && reports.length > 0) { %>
+                <div class="reports-list">
+                    <% reports.forEach(function(report) { %>
+                        <div class="report-card">
+                            <h3><%= report.location %> - <small>Danger Level: <%= report.dangerLevel %></small></h3>
+                            <p><strong>Diver:</strong> <%= report.diverName %></p>
+                            <p><strong>Advice:</strong> <%= report.advice %></p>
+                            <p class="timestamp"><small>Reported at: <%= report.createdAt.toLocaleString() %></small></p>
+                        </div>
+                    <% }); %>
+                </div>
+            <% } else { %>
+                <p>No reports found. Be the first to submit one!</p>
+            <% } %>
+        </section>
+    </main>
+</body>
+</html>
